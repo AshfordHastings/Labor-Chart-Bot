@@ -24,8 +24,9 @@ public class Position {
 	private int numSlots;
 	private String stringTime;
 	private String laborDays;
-	private Set<LaborSlot> laborSlots;
-	private Set<DayOfWeek> daysOfWeek;
+	
+	private transient Set<LaborSlot> laborSlots;
+	private transient Set<DayOfWeek> daysOfWeek;
 	
 	
 

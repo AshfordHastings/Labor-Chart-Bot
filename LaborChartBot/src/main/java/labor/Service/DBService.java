@@ -14,7 +14,6 @@ import labor.Entity.Embedded.TimeSlot;
 
 @Service
 public class DBService {
-	
 	RestTemplate rest = new RestTemplate();
 	
 	/* CooperRespository Requests */
@@ -24,6 +23,7 @@ public class DBService {
 				"http://localhost:8090/api/coopers/search/findByDiscordTag{discordTag}",
 				CooperList.class, 
 				discordTag);
+		rest.
 		try {
 			return matchingCoopers.getCoopers().get(0);
 		} catch(Exception e) {
@@ -45,7 +45,7 @@ public class DBService {
 	}
 	
 	// POST new Cooper
-	public Cooper saveCooper(Cooper cooper) {
+	public Cooper createCooper(Cooper cooper) {
 		return rest.postForObject("http://localhost:8090/api/coopers", cooper, Cooper.class);
 	}
 	
@@ -79,10 +79,11 @@ public class DBService {
 	
 	/* PositionRepository Requests */
 	
-	public Position createPosition(Position position) {
-		return rest.postForObject(
-				"http://localhost:8090/api/positions{position}", 
-				position, 
+	public void createPosition(Position position) {
+		System.out.println(position);
+		rest.postForObject(
+				"http://localhost:8090/api/positions/save", 
+				position,
 				Position.class);
 	}
 	

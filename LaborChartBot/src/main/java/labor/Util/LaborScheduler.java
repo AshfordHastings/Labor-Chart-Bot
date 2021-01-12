@@ -25,6 +25,8 @@ public class LaborScheduler implements Runnable{
 		this.laborService = laborService;
 	}
 
+	
+	//
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub

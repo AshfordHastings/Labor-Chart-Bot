@@ -21,7 +21,7 @@ public class NotifierService{
 	LaborService laborService;
 	
 	public void setNotifyTime(DayOfWeek dayOfWeek, LocalTime time) {
-		if(!(laborService.getRepoService().getLaborSlotRepo().findByDayOfWeekAndTime(dayOfWeek, time.toString()).size() > 0)) {
+		//if(!(laborService.getRepoService().getLaborSlotRepo().findByDayOfWeekAndTime(dayOfWeek, time.toString()).size() > 0)) {
 		
 			ThreadPoolTaskScheduler laborScheduler = new ThreadPoolTaskScheduler();
 			laborScheduler
@@ -31,5 +31,5 @@ public class NotifierService{
 					new CronTrigger("0 " + time.getMinute() + " " + time.getHour() + " * * " + dayOfWeek.getValue()));
 			//new CronTrigger("* * " + time.getHour() + " * * " + dayOfWeek.getValue() + " * "));
 			}
-	}
+	//}
 }
