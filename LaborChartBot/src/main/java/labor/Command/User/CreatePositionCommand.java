@@ -29,11 +29,10 @@ public class CreatePositionCommand implements Command {
 		String length = messageParsed.get(5);
 		String numSlots = messageParsed.get(6);
 		
-		Position newPosition = new Position(id, name, time, labordays, Integer.valueOf(length), Integer.valueOf(numSlots), laborService);
-		laborService.getRepoService().getPositionRepo().save(newPosition);
+		Position newPosition = new Position(id, name, time, labordays, Integer.valueOf(length), Integer.valueOf(numSlots));
+		laborService.getDBService().createPosition(newPosition);
 		
-		Optional<Position> optPosition = laborService.getRepoService().getPositionRepo().findById(id);
-		Position position = optPosition.get();
+		Position position = laborService.getDBService().findPositionById(id);
 		
 		String returnMessage = new String();
 		returnMessage = returnMessage.concat("New Position has been saved to the database:" + '\n' + position);

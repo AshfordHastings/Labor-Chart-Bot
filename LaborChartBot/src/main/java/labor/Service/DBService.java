@@ -44,6 +44,10 @@ public class DBService {
 		}
 	}
 	
+	// POST new Cooper
+	public Cooper saveCooper(Cooper cooper) {
+		return rest.postForObject("http://localhost:8090/api/coopers", cooper, Cooper.class);
+	}
 	
 	
 	
@@ -69,6 +73,10 @@ public class DBService {
 		
 	}
 	
+	public void patchLaborSlot(LaborSlot laborSlot) {
+		rest.patchForObject("http://localhost:8090/api/laborSlots/{laborSlot}", laborSlot, LaborSlot.class);
+	}
+	
 	/* PositionRepository Requests */
 	
 	public Position createPosition(Position position) {
@@ -78,14 +86,9 @@ public class DBService {
 				Position.class);
 	}
 	
-	
-	String id = messageParsed.get(1);
-	String name = messageParsed.get(2);
-	String time = messageParsed.get(3);
-	String labordays = messageParsed.get(4);
-	String length = messageParsed.get(5);
-	String numSlots = messageParsed.get(6);
-	
+	public Position findPositionById(String id) {
+		return rest.getForObject("http://localhost:8090/api/positions{id}", Position.class, id);
+	}
 	
 	// Wrapper class StringList to receive lists from HTTP call
 	public class StringList {

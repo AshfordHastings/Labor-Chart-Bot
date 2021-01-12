@@ -41,30 +41,30 @@ public class RemoveLaborersCommand implements Command {
 		
 		// If there are no arguments for specific laboers to be removed, remove all laborers
 		if(!(messageParsed.size() > minimumArguments)) {
-			List<LaborSlot> dbSlotsFromQuery = laborService.getRepoService().getLaborSlotRepo().findByDayOfWeekAndPosition(dayOfWeek, positionString);
+			List<LaborSlot> dbSlotsFromQuery = laborService.getDBService().findLaborSlotByDayOfWeekAndPosition(dayOfWeek, positionString);
 			for(LaborSlot laborSlotFromQuery : dbSlotsFromQuery) {
 				laborSlotFromQuery.clearCooper();
-				laborService.getRepoService().getLaborSlotRepo().save(laborSlotFromQuery);
+				laborService.getDBService().patchLaborSlot(laborSlotFromQuery);
 			}
 			// If there are arguments for specific laborers to be remvoed
 		} else {
 			for(int i = 0; i < membersToUpdate.size(); i++) {
 				try {
-					LaborSlot laborSlotFromQuery = laborService.getRepoService().getLaborSlotRepo().findByDayOfWeekAndPositionAndDiscordTag(dayOfWeek, positionString, membersToUpdate.get(i).getUser().getAsTag()).get(0);
+					LaborSlot laborSlotFromQuery = laborService.getDBService().findLaborSlotByDayOfWeekAndPositionAndDiscordTag(dayOfWeek, positionString, membersToUpdate.get(i).getUser().getAsTag()).get(0);
 					laborSlotFromQuery.clearCooper();
-					laborService.getRepoService().getLaborSlotRepo().save(laborSlotFromQuery);
+					laborService.getDBService().patchLaborSlot(laborSlotFromQuery);
 				} catch(IndexOutOfBoundsException e) {
 					discordOutput.sendMessage("Unable to Remove the user " + membersToUpdate.get(i).getAsMention() + " because they aren't at this labor slot!");
 				}
 			}
 		}
 		
-		List<LaborSlot> dbSlotsFromQuery = laborService.getRepoService().getLaborSlotRepo().findByDayOfWeekAndPosition(dayOfWeek, positionString);
+		List<LaborSlot> dbSlotsFromQuery = laborService.getDBService().findLaborSlotByDayOfWeekAndPosition(dayOfWeek, positionString);
 		StringBuilder returnString = new StringBuilder();
 		returnString.append("Database was successfully updated! \nHere are the current coopers for the position" + positionString + " on " + dayOfWeek.toString() + ":");
 		for(LaborSlot dbSlotFromQuery : dbSlotsFromQuery) {
-			if(dbSlotFromQuery.getMember() != null) {
-				returnString.append('\n' + dbSlotFromQuery.getMember().getDiscordTag());
+			if(dbSlotFromQuery.getCooper() != null) {
+				returnString.append('\n' + dbSlotFromQuery.getCooper().getDiscordTag());
 			}
 		}
 		discordOutput.sendMessage(returnString.toString());

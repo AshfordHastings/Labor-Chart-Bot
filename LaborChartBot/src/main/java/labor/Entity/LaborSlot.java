@@ -15,6 +15,11 @@ public class LaborSlot {
 	LaborSlot() {
 		
 	}
+	
+	
+	public void clearCooper() {
+		this.cooper = null;
+	}
 
 	public String getId() {
 		return id;
@@ -32,7 +37,9 @@ public class LaborSlot {
 		return timeSlot;
 	}
 	
-	
+	public void setCooper(Cooper cooper) {
+		this.cooper = cooper;
+	}
 	
 	
 

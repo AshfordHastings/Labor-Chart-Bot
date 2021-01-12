@@ -7,6 +7,8 @@ import java.util.Set;
 
 import org.springframework.stereotype.Component;
 
+import labor.Service.LaborService;
+
 
 public class Position {
 	public static enum LaborDays {
@@ -26,6 +28,18 @@ public class Position {
 	private Set<DayOfWeek> daysOfWeek;
 	
 	
+
+	public Position(String id, String name,  String stringTime, String laborDays, int length, int numSlots) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.length = length;
+		this.numSlots = numSlots;
+		this.stringTime = stringTime;
+		this.laborDays = laborDays;
+	}
+
+
 	public String getId() {
 		return id;
 	}

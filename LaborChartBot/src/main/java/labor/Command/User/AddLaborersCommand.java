@@ -11,7 +11,6 @@ import labor.Command.CommandInfo;
 import labor.Entity.Cooper;
 import labor.Entity.LaborSlot;
 import labor.Service.LaborService;
-import labor.Service.RepoService;
 import labor.Util.DiscordOutput;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -83,13 +82,13 @@ public class AddLaborersCommand implements Command {
 					// creates new cooper if cooper doesn't exist in database
 					if(cooperSearchByTag == null) {
 						updatedCooper = new Cooper(memberEntry);
-						laborService.getRepoService().getMemberRepo().save(updatedCooper);
+						laborService.getDBService().saveCooper(updatedCooper);
 					} else {
 						updatedCooper = cooperSearchByTag;
 					}
 					returnMessage.append(updatedCooper.getDiscordTag() + '\n');
 					updateSlot.setCooper(updatedCooper);
-					laborService.getRepoService().getLaborSlotRepo().save(updateSlot);
+					laborService.getDBService().patchLaborSlot(updateSlot);
 				}
 				catch(IndexOutOfBoundsException e) {
 					
