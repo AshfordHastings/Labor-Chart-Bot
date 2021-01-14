@@ -25,11 +25,14 @@ public class Position {
 	private String stringTime;
 	private String laborDays;
 	
-	private transient Set<LaborSlot> laborSlots;
-	private transient Set<DayOfWeek> daysOfWeek;
+	private Set<LaborSlot> laborSlots = new HashSet<LaborSlot>();
+	private Set<DayOfWeek> daysOfWeek = new HashSet<DayOfWeek>();
 	
 	
-
+	public Position() {
+		
+	}
+	
 	public Position(String id, String name,  String stringTime, String laborDays, int length, int numSlots) {
 		super();
 		this.id = id;
@@ -86,5 +89,8 @@ public class Position {
 		return daysOfWeek;
 	}
 	
+	public void setName(String name) {
+		this.name = name;
+	}
 	
 }

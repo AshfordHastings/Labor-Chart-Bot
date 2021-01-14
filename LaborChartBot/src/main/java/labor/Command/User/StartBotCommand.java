@@ -17,7 +17,7 @@ public class StartBotCommand implements Command {
 		laborService.getJdaService().activateLaborCommands();
 		
 		
-		// Bot Testing
+
 		
 	}
 

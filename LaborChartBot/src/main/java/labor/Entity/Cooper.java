@@ -14,6 +14,16 @@ public class Cooper {
 		this.discordTag = member.getAsMention();
 	}
 	
+	public Cooper(String username, String discordTag) {
+		this.username = username;
+		this.discordTag = discordTag;
+		this.id = null;
+	}
+	
+	Cooper() {
+		
+	}
+	
 	public Long getId() {
 		return id;
 	}
