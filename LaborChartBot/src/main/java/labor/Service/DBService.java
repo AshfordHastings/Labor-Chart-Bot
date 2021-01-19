@@ -154,17 +154,16 @@ public class DBService {
 	
 	/* PositionRepository Requests */
 	
-	// Fail
+	// Pass
 	public Position findPositionById(String id) {
 		HttpEntity<Position> responseEntity = rest.getForEntity("http://localhost:8090/api/positions/search/?id={id}", Position.class, id);
 		return responseEntity.getBody();
 	}
 	
 	// Untested
-	public void createPosition(Position position) {
-		System.out.println(position);
+	public void postPosition(Position position) {
 		rest.postForObject(
-				"http://localhost:8090/api/positions/save", 
+				"http://localhost:8090/api/positions", 
 				position,
 				Position.class);
 	}

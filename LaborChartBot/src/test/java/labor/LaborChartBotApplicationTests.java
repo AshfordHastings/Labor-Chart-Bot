@@ -49,7 +49,7 @@ class LaborChartBotApplicationTests {
 	@Test // Fail
 	void testFindLaborSlotByTimeSlot() {
 		Position testPosition = new Position("DCU", "Dinner Clean-Up", "18:00", "WEEKDAYS", 2, 4);
-		laborService.getDBService().createPosition(testPosition);
+		laborService.getDBService().postPosition(testPosition);
 		List<LaborSlot> responseLaborSlots = laborService.getDBService().findLaborSlotByDayOfWeekAndPosition(DayOfWeek.TUESDAY, testPosition.getId());
 		
 		List<LaborSlot> responseLaborSlots2 = laborService.getDBService().findLaborSlotByTimeSlot(responseLaborSlots.get(0).getTimeSlot());
@@ -93,7 +93,7 @@ class LaborChartBotApplicationTests {
 	
 	/* PositionRepository Tests */
 	
-	@Test //Fail
+	@Test // Pass
 	void testFindPositionById() {
 		Position testPosition = laborService.getDBService().findPositionById("DCH");
 		assertThat(testPosition).isNotNull();
@@ -101,9 +101,9 @@ class LaborChartBotApplicationTests {
 	}
 	
 	@Test
-	void createPosition() {
+	void testPostPosition() {
 		Position testPosition = new Position("DCU", "Dinner Clean-Up", "18:00", "WEEKDAYS", 2, 4);
-		laborService.getDBService().createPosition(testPosition);
+		laborService.getDBService().postPosition(testPosition);
 		Position responsePosition = laborService.getDBService().findPositionById(testPosition.getId());
 		
 		assertThat(responsePosition.getName()).isEqualTo(testPosition.getName());
