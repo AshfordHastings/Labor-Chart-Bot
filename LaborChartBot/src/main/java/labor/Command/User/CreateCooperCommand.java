@@ -27,7 +27,7 @@ public class CreateCooperCommand implements Command {
 		for(Cooper cooper:cooperList) {
 			
 			
-			laborService.getDBService().createCooper(cooper);
+			laborService.getDBService().postCooper(cooper);
 			returnMessage.append(cooper.getDiscordTag() + ", ");
 		}
 		

@@ -33,6 +33,12 @@ public class Cooper {
 	public String getDiscordTag() {
 		return discordTag;
 	}
+
+	@Override
+	public String toString() {
+		return "Cooper [id=" + id + ", username=" + username + ", discordTag=" + discordTag + "]";
+	}
+	
 	
 	
 }

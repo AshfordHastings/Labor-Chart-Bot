@@ -82,7 +82,7 @@ public class AddLaborersCommand implements Command {
 					// creates new cooper if cooper doesn't exist in database
 					if(cooperSearchByTag == null) {
 						updatedCooper = new Cooper(memberEntry);
-						laborService.getDBService().createCooper(updatedCooper);
+						laborService.getDBService().postCooper(updatedCooper);
 					} else {
 						updatedCooper = cooperSearchByTag;
 					}

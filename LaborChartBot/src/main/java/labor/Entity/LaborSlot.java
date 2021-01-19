@@ -1,6 +1,9 @@
 package labor.Entity;
 
 import java.time.DayOfWeek;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import labor.Entity.Embedded.TimeSlot;
 
 
@@ -8,7 +11,7 @@ public class LaborSlot {
 	// Day:Hour:Minute
 	private String id;
 	
-	Cooper cooper;
+	private Cooper cooper;
 	private Position position;
 	private TimeSlot timeSlot;
 	

@@ -20,47 +20,52 @@ class LaborChartBotApplicationTests {
 	@Autowired
 	LaborService laborService;
 	
-	@Test
-	void testFindPositionById() {
-		
-		// Find Position, find Member
-		
-		Position testPosition = laborService.getDBService().findPositionById("DCH");
-		assertThat(testPosition).isNotNull();
-		assertThat(testPosition.getName()).isEqualTo("Dinner Chef");
-		
-
-		
-		
-		//LaborSlot laborService.getDBService().findLaborSlotByDayOfWeekAndPosition(dayOfWeek, position)
+	/* CooperRespository Tests */
+	@Test // Pass
+	void testFindCooperByDiscordTag() {
+		Cooper testCooper = laborService.getDBService().findCooperByDiscordTag("blake#4416");
+		assertThat(testCooper).isNotNull();
+		assertThat(testCooper.getUsername()).isEqualTo("blake");
 	}
 	
-	@Test
-	void testFindCooper() {
-		
-		// Bot Testing
-		
-		//Cooper testCooper = laborService.getDBService().findCooperByDiscordTag("blake#4416");
-		//assertThat(testCooper).isNotNull();
-		//assertThat(testCooper.getUsername()).isEqualTo("blake");
-		
-		Cooper testCooperUsername = laborService.getDBService().findCooperByUsername("blake");
-		assertThat(testCooperUsername).isNotNull();
-		
-		//LaborSlot laborService.getDBService().findLaborSlotByDayOfWeekAndPosition(dayOfWeek, position)
+	@Test // Pass
+	void testFindCooperByUsername() {
+		Cooper testCooper = laborService.getDBService().findCooperByUsername("blake");
+		assertThat(testCooper).isNotNull();
+		assertThat(testCooper.getDiscordTag()).isEqualTo("blake#4416");
 	}
 	
-	@Test
-	void testLaborSlotQueries() {
-		//TimeSlot timeSlot;
-		//Cooper testCooperUsername = laborService.getDBService().findLaborSlotByTimeSlot(timeSlot)
-		//assertThat(testCooperUsername).isNotNull();
+	@Test // Pass
+	void testPostCooper() {
+		Cooper newCooper = new Cooper("ash", "ash#1234");
+		laborService.getDBService().postCooper(newCooper);
 		
+		Cooper testCooper = laborService.getDBService().findCooperByUsername("ash");
+		assertThat(testCooper).isNotNull();
+		assertThat(testCooper.getDiscordTag()).isEqualTo("ash#1234");
+	}
+	
+	/* LaborSlotRespository Tests */
+	@Test // Fail
+	void testFindLaborSlotByTimeSlot() {
+		Position testPosition = new Position("DCU", "Dinner Clean-Up", "18:00", "WEEKDAYS", 2, 4);
+		laborService.getDBService().createPosition(testPosition);
+		List<LaborSlot> responseLaborSlots = laborService.getDBService().findLaborSlotByDayOfWeekAndPosition(DayOfWeek.TUESDAY, testPosition.getId());
+		
+		List<LaborSlot> responseLaborSlots2 = laborService.getDBService().findLaborSlotByTimeSlot(responseLaborSlots.get(0).getTimeSlot());
+		assertThat(responseLaborSlots2.size()).isEqualTo(4);
+	}
+	
+	@Test // Pass
+	void testFindLaborSlotByDayOfWeekAndPosition() {
 		List<LaborSlot> testLaborSlot1 = laborService.getDBService().findLaborSlotByDayOfWeekAndPosition(DayOfWeek.MONDAY, "DCH");
 		assertThat(testLaborSlot1).isNotNull();
 		assertThat(testLaborSlot1).hasSize(2);
 		assertThat(testLaborSlot1.get(0).getPosition().getId()).isEqualTo("DCH");
-		
+	}
+	
+	@Test // Pass
+	void testFindLaborSlotByDayOfWeekAndPositionAndDiscordTag() {
 		List<LaborSlot> testLaborSlot2 = laborService.getDBService().findLaborSlotByDayOfWeekAndPositionAndDiscordTag(DayOfWeek.TUESDAY, "DCH", "blake#4416");
 		assertThat(testLaborSlot2).isNotNull();
 		assertThat(testLaborSlot2).hasSize(1);
@@ -68,43 +73,51 @@ class LaborChartBotApplicationTests {
 		assertThat(testLaborSlot2.get(0).getCooper().getDiscordTag()).isEqualTo("blake#4416");
 	}
 	
-	@Test
-	void testLaborSlotQuery3() {
+	@Test // Pass
+	void testFindLaborSlotByDayOfWeekAndTime() {
 		List<LaborSlot> testLaborSlot3 = laborService.getDBService().findLaborSlotByDayOfWeekAndTime(DayOfWeek.TUESDAY, "16:00");
 		assertThat(testLaborSlot3).isNotNull();
 		assertThat(testLaborSlot3).hasSize(2);
 		assertThat(testLaborSlot3.get(0).getPosition().getId()).isEqualTo("DCH");
-	}	
-	
-	@Test
-	void testLaborSlotQuery4() {
-		Cooper cooper = laborService.getDBService().findCooperByUsername("blake");
-		List<LaborSlot> testLaborSlot4 = laborService.getDBService().findLaborSlotByCooper(cooper);
-		assertThat(testLaborSlot4).isNotNull();
-		assertThat(testLaborSlot4).hasSize(1);
-		assertThat(testLaborSlot4.get(0).getPosition().getId()).isEqualTo("DCH");
 	}
 	
-	@Test
-	void testFindCooperByTag() {
-		Cooper testCooperUsername = laborService.getDBService().findCooperByDiscordTag("blake#4416");
-		assertThat(testCooperUsername).isNotNull();
+	@Test // Pass
+	void testFindLaborSlotByCooper() {
+		Cooper testCooper = laborService.getDBService().findCooperByUsername("blake");
+		System.out.println(testCooper);
+		List<LaborSlot> testLaborSlot = laborService.getDBService().findLaborSlotByCooper(testCooper);
+		assertThat(testLaborSlot).isNotNull();
+		assertThat(testLaborSlot).hasSize(1);
+		assertThat(testLaborSlot.get(0).getPosition().getId()).isEqualTo("DCH");
 	}
 	
-	@Test
-	void testPost() {
-		Cooper newCooper = new Cooper("ash", "ash#1234");
-		laborService.getDBService().createCooper(newCooper);
-		
-		Cooper testCooper = laborService.getDBService().findCooperByUsername("ash");
-		assertThat(testCooper).isNotNull();
-	}
+	/* PositionRepository Tests */
 	
-	@Test
-	void testPatch() {
+	@Test //Fail
+	void testFindPositionById() {
 		Position testPosition = laborService.getDBService().findPositionById("DCH");
 		assertThat(testPosition).isNotNull();
 		assertThat(testPosition.getName()).isEqualTo("Dinner Chef");
+	}
+	
+	@Test
+	void createPosition() {
+		Position testPosition = new Position("DCU", "Dinner Clean-Up", "18:00", "WEEKDAYS", 2, 4);
+		laborService.getDBService().createPosition(testPosition);
+		Position responsePosition = laborService.getDBService().findPositionById(testPosition.getId());
+		
+		assertThat(responsePosition.getName()).isEqualTo(testPosition.getName());
+		assertThat(responsePosition.getDaysOfWeek().size()).isEqualTo(5);
+		assertThat(responsePosition.getLaborSlots().size()).isEqualTo(testPosition.getNumSlots() * 5);
+		
+		List<LaborSlot> responseLaborSlots = laborService.getDBService().findLaborSlotByDayOfWeekAndPosition(DayOfWeek.THURSDAY, testPosition.getId());
+		assertThat(responseLaborSlots.size()).isEqualTo(4);
+	}
+
+	
+	@Test
+	void testPatchPosition() {
+		Position testPosition = laborService.getDBService().findPositionById("DCH");
 		
 		testPosition.setName("Dinner Chef Update");
 		laborService.getDBService().patchPosition(testPosition);

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -22,6 +23,7 @@ public class DBService {
 	
 	/* CooperRespository Requests */
 	// GET cooper by DiscordTag
+	// Pass
 	public Cooper findCooperByDiscordTag(String discordTag) {
 		Cooper[] matchingCoopers = rest.getForObject(
 				"http://localhost:8090/api/coopers/search/?discordTag={discordTag}",
@@ -35,6 +37,7 @@ public class DBService {
 	}
 	
 	// GET cooper by Username
+	// Pass
 	public Cooper findCooperByUsername(String username) {
 		ResponseEntity<Cooper[]> matchingCoopers = rest.getForEntity(
 				"http://localhost:8090/api/coopers/search/?username={username}",
@@ -47,19 +50,19 @@ public class DBService {
 		}
 	}
 	
-	// POST new Cooper - won't work because you can't create an ID?? I think
-	public Cooper createCooper(Cooper cooper) {
+	// Pass
+	public Cooper postCooper(Cooper cooper) {
 		return rest.postForObject("http://localhost:8090/api/coopers", cooper, Cooper.class);
 	}
 	
 	
 	
 	/* LaborSlotRespository Requests */
-	
+	// Untested
 	public List<LaborSlot> findLaborSlotByTimeSlot(TimeSlot timeSlot) {
 		
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("timeSlot", timeSlot)
+		params.put("timeSlot", timeSlot);
 		LaborSlot[] laborSlotQuery = rest.getForObject(
 				"http://localhost:8090/api/laborSlots/search/?timeSlot={timeSlot}",
 				LaborSlot[].class, 
@@ -72,6 +75,7 @@ public class DBService {
 		
 	}
 	
+	// Pass
 	public List<LaborSlot> findLaborSlotByDayOfWeekAndPosition(DayOfWeek dayOfWeek, String position) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("dayOfWeek", dayOfWeek);
@@ -87,22 +91,32 @@ public class DBService {
 		}
 	}
 	
+	// Pass
 	public List<LaborSlot> findLaborSlotByDayOfWeekAndPositionAndDiscordTag(DayOfWeek dayOfWeek, String position, String discordTag) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("dayOfWeek", dayOfWeek);
 		params.put("position", position);
 		params.put("discordTag", discordTag);
-		LaborSlot[] laborSlotQuery = rest.getForObject(
+		
+		//ResponseEntity<String> laborSlotQuery = rest.getForEntity(
+		//		"http://localhost:8090/api/laborSlots/search/?dayOfWeek={dayOfWeek}&position={position}&discordTag={discordTag}",
+		//		String.class, 
+		//		params);
+		//System.out.println(laborSlotQuery.getBody());
+		
+		ResponseEntity<LaborSlot[]> laborSlotQuery = rest.getForEntity(
 				"http://localhost:8090/api/laborSlots/search/?dayOfWeek={dayOfWeek}&position={position}&discordTag={discordTag}",
 				LaborSlot[].class, 
 				params);
+		
 		try {
-			return Arrays.asList(laborSlotQuery);
+			return Arrays.asList(laborSlotQuery.getBody());
 		} catch(Exception e) {
 			return null;
 		}
 	}
 	
+	// Pass
 	public List<LaborSlot> findLaborSlotByDayOfWeekAndTime(DayOfWeek dayOfWeek, String time) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("dayOfWeek", dayOfWeek);
@@ -118,9 +132,10 @@ public class DBService {
 		}
 	}
 	
+	// Pass
 	public List<LaborSlot> findLaborSlotByCooper(Cooper cooper) {
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("cooper", cooper);
+		params.put("cooper", cooper.getId());
 		LaborSlot[] laborSlotQuery = rest.getForObject(
 				"http://localhost:8090/api/laborSlots/search/?cooper={cooper}",
 				LaborSlot[].class, 
@@ -132,12 +147,20 @@ public class DBService {
 		}
 	}
 	
+	// Untested
 	public void patchLaborSlot(LaborSlot laborSlot) {
 		rest.patchForObject("http://localhost:8090/api/laborSlots/{laborSlot}", laborSlot, LaborSlot.class);
 	}
 	
 	/* PositionRepository Requests */
 	
+	// Fail
+	public Position findPositionById(String id) {
+		HttpEntity<Position> responseEntity = rest.getForEntity("http://localhost:8090/api/positions/search/?id={id}", Position.class, id);
+		return responseEntity.getBody();
+	}
+	
+	// Untested
 	public void createPosition(Position position) {
 		System.out.println(position);
 		rest.postForObject(
@@ -146,10 +169,7 @@ public class DBService {
 				Position.class);
 	}
 	
-	public Position findPositionById(String id) {
-		return rest.getForObject("http://localhost:8090/api/positions/{id}", Position.class, id);
-	}
-	
+	// Untested
 	public void patchPosition(Position position) {
 		rest.patchForObject("http://localhost:8090/api/positions/{position}", position, Position.class);
 	}
