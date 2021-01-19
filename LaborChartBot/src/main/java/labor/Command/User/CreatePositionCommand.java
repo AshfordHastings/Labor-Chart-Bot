@@ -30,7 +30,7 @@ public class CreatePositionCommand implements Command {
 		String numSlots = messageParsed.get(6);
 		
 		Position newPosition = new Position(id, name, time, labordays, Integer.valueOf(length), Integer.valueOf(numSlots));
-		laborService.getDBService().createPosition(newPosition);
+		laborService.getDBService().postPosition(newPosition);
 		
 		Position position = laborService.getDBService().findPositionById(id);
 		

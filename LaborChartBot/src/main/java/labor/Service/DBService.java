@@ -58,13 +58,14 @@ public class DBService {
 	
 	
 	/* LaborSlotRespository Requests */
-	// Untested
+	// Untested/
+	/*
 	public List<LaborSlot> findLaborSlotByTimeSlot(TimeSlot timeSlot) {
 		
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("timeSlot", timeSlot);
 		LaborSlot[] laborSlotQuery = rest.getForObject(
-				"http://localhost:8090/api/laborSlots/search/?timeSlot={timeSlot}",
+				"http://localhost:8090/api/laborSlots/search",
 				LaborSlot[].class, 
 				params);
 		try {
@@ -73,6 +74,21 @@ public class DBService {
 			return null;
 		}
 		
+	}
+	*/
+	
+	public List<LaborSlot> findLaborSlotByPosition(String position) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("position", position);
+		LaborSlot[] laborSlotQuery = rest.getForObject(
+				"http://localhost:8090/api/laborSlots/search/?&position={position}",
+				LaborSlot[].class, 
+				params);
+		try {
+			return Arrays.asList(laborSlotQuery);
+		} catch(Exception e) {
+			return null;
+		}
 	}
 	
 	// Pass
@@ -135,9 +151,9 @@ public class DBService {
 	// Pass
 	public List<LaborSlot> findLaborSlotByCooper(Cooper cooper) {
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("cooper", cooper.getId());
+		params.put("id", cooper.getId());
 		LaborSlot[] laborSlotQuery = rest.getForObject(
-				"http://localhost:8090/api/laborSlots/search/?cooper={cooper}",
+				"http://localhost:8090/api/laborSlots/search/?cooperId={id}",
 				LaborSlot[].class, 
 				params);
 		try {
@@ -149,7 +165,7 @@ public class DBService {
 	
 	// Untested
 	public void patchLaborSlot(LaborSlot laborSlot) {
-		rest.patchForObject("http://localhost:8090/api/laborSlots/{laborSlot}", laborSlot, LaborSlot.class);
+		rest.postForObject("http://localhost:8090/api/laborSlots", laborSlot, LaborSlot.class);
 	}
 	
 	/* PositionRepository Requests */
@@ -161,11 +177,13 @@ public class DBService {
 	}
 	
 	// Untested
-	public void postPosition(Position position) {
-		rest.postForObject(
+	public Position postPosition(Position position) {
+		ResponseEntity<Position> responseEntity = rest.postForEntity(
 				"http://localhost:8090/api/positions", 
 				position,
 				Position.class);
+		System.out.println(responseEntity.getBody());
+		return responseEntity.getBody();
 	}
 	
 	// Untested

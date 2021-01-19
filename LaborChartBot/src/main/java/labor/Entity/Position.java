@@ -1,13 +1,14 @@
 package labor.Entity;
 
+import java.io.IOException;
 import java.time.DayOfWeek;
-import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.springframework.stereotype.Component;
-
-import labor.Service.LaborService;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 
 public class Position {
@@ -92,5 +93,6 @@ public class Position {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
 	
 }
