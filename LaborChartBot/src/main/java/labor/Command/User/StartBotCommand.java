@@ -15,10 +15,7 @@ public class StartBotCommand implements Command {
 		
 		laborService.getJdaService().setDefaultOutput(message.getChannel());
 		laborService.getJdaService().activateLaborCommands();
-		
-		
-
-		
+		laborService.getNotifierService().subscribe();
 	}
 
 }

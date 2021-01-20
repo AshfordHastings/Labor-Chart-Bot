@@ -1,6 +1,9 @@
 package labor.Service;
 
+import java.net.URI;
+import java.net.URL;
 import java.time.DayOfWeek;
+import java.time.Duration;
 import java.time.LocalTime;
 import java.util.Date;
 
@@ -11,8 +14,11 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Service;
 
-import labor.Notifier.LaborScheduler;
+import com.launchdarkly.eventsource.EventHandler;
+import com.launchdarkly.eventsource.*;
+import com.launchdarkly.eventsource.EventSource;
 
+import labor.Util.NotifierEventHandler;
 //
 @Service
 public class NotifierService{
@@ -20,16 +26,12 @@ public class NotifierService{
 	@Autowired
 	LaborService laborService;
 	
-	public void setNotifyTime(DayOfWeek dayOfWeek, LocalTime time) {
-		//if(!(laborService.getRepoService().getLaborSlotRepo().findByDayOfWeekAndTime(dayOfWeek, time.toString()).size() > 0)) {
-		
-			ThreadPoolTaskScheduler laborScheduler = new ThreadPoolTaskScheduler();
-			laborScheduler
-				.initialize();
-			laborScheduler.schedule(
-					new LaborScheduler(dayOfWeek, time.toString(), laborService),
-					new CronTrigger("0 " + time.getMinute() + " " + time.getHour() + " * * " + dayOfWeek.getValue()));
-			//new CronTrigger("* * " + time.getHour() + " * * " + dayOfWeek.getValue() + " * "));
-			}
-	//}
+	public void subscribe() {
+		EventHandler eventHandler = new NotifierEventHandler();
+		String url = "http://localhost:8090/sse/laborUpdates";
+		EventSource.Builder builder = new EventSource.Builder(eventHandler, URI.create(url));
+		builder.connectTimeout(Duration.ofHours(2));
+		EventSource eventSource = builder.build();
+		eventSource.start();
+	}
 }

@@ -164,8 +164,9 @@ public class DBService {
 	}
 	
 	// Untested
-	public void patchLaborSlot(LaborSlot laborSlot) {
-		rest.postForObject("http://localhost:8090/api/laborSlots", laborSlot, LaborSlot.class);
+	public LaborSlot patchLaborSlot(LaborSlot laborSlot) {
+		ResponseEntity<LaborSlot> response = rest.postForEntity("http://localhost:8090/api/laborSlots", laborSlot, LaborSlot.class);
+		return response.getBody();
 	}
 	
 	/* PositionRepository Requests */

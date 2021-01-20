@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -15,14 +17,15 @@ import labor.Entity.LaborSlot;
 import labor.Entity.Position;
 import labor.Service.LaborService;
 
+@TestInstance(Lifecycle.PER_CLASS)
 @SpringBootTest
 class LaborChartBotApplicationTests {
 
 	@Autowired
 	LaborService laborService;
 	
-	//@BeforeAll
-	void  init() {
+	@BeforeAll
+	void init() {
 		laborService.getDBService().postPosition(new Position("DCH", "Dinner Chef", "16:00", "EVERYDAY", 2, 2));
 		LaborSlot updateSlot = laborService.getDBService().findLaborSlotByDayOfWeekAndPosition(DayOfWeek.TUESDAY, "DCH").get(0);
 		Cooper newCooper = new Cooper("blake", "blake#4416");
@@ -107,35 +110,18 @@ class LaborChartBotApplicationTests {
 	
 	@Test
 	void testPatchLaborSlot() {
-		/*
-		Position testPosition = new Position("DCU", "Dinner Clean-Up", "18:00", "WEEKDAYS", 2, 4);
-		laborService.getDBService().postPosition(testPosition);
-		List<LaborSlot> queryResponse = laborService.getDBService().findLaborSlotByPosition(testPosition.getId());
-		
-		LaborSlot testLaborSlot = queryResponse.get(0);
-		Cooper testCooper = new Cooper("ash", "ash#1234");
-		laborService.getDBService().postCooper(testCooper);
-		testLaborSlot.setCooper(testCooper);
-		laborService.getDBService().patchLaborSlot(testLaborSlot);
-		
-		List<LaborSlot> queryResponse2 = laborService.getDBService().findLaborSlotByCooper(testCooper);
-		assertThat(queryResponse2.size()).isEqualTo(1);
-		assertThat(queryResponse2.get(0).getPosition().getId()).isEqualTo(testPosition.getId());
-		*/
 		Position newPosition = new Position("DCH", "Dinner Chef", "16:00", "EVERYDAY", 2, 2);
 		laborService.getDBService().postPosition(newPosition);
 		LaborSlot updateSlot = laborService.getDBService().findLaborSlotByDayOfWeekAndPosition(DayOfWeek.TUESDAY, "DCH").get(0);
-		Cooper newCooper = new Cooper("blake", "blake#4416");
+		Cooper newCooper = new Cooper("mike", "mike#4416");
 		updateSlot.setCooper(newCooper);
 		Cooper returnCooper = laborService.getDBService().postCooper(newCooper);
-		laborService.getDBService().patchLaborSlot(updateSlot);
+		LaborSlot returnSlot = laborService.getDBService().patchLaborSlot(updateSlot);
 		
 		//List<LaborSlot> queryResponse = laborService.getDBService().findLaborSlotByCooper(returnCooper);
 		List<LaborSlot> queryResponse = laborService.getDBService().findLaborSlotByCooper(returnCooper);
 		assertThat(queryResponse.size()).isEqualTo(1);
 		assertThat(queryResponse.get(0).getPosition().getId()).isEqualTo(newPosition.getId());
-		
-		
 	}
 	
 	/* PositionRepository Tests */
