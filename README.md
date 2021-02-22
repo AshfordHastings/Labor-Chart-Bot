@@ -5,8 +5,10 @@ The application also contiously notifies laborers when their shifts are starting
 
 Server can be found here: <https://github.com/AshfordHastings/Labor-Chart-Server>
 
+> Note: The project is in progress and has been stepped away from briefly. The next steps involve building front-end of the application, as opposed to fixing the bugs in the Discord communication tool. Updates will be posted soon! This is a highly anticipated project by our housing cooperative, and we are working on creating a solid timeline for the deployment of this application.
+
 ## To-Do:
-- [ ] Complete methods meant to consume the server's API. 
+- [X] Complete methods meant to consume the server's API. 
 - [ ] Update service for notifying members at labor times
 - [ ] Parse Google Sheet for labor positions as opposed to relying purely on Discord commands
 
