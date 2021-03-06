@@ -1,4 +1,4 @@
-# 21st Street Labor Chart Server
+# 21st Street Labor Chart Client
 > Client application uses the Discord API to handle commands sent by members relating to 
 updating and accessing the 21st Street Labor Chart. This application updates the database by consuming the REST API endpoints created in the separate server program.
 The application also contiously notifies laborers when their shifts are starting through messages in our facility's Discord server.
